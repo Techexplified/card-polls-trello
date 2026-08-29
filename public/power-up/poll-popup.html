@@ -1,100 +1,187 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Add a Poll</title>
-  <script src="https://p.trellocdn.com/power-up.min.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #fff;
-      color: #172b4d;
-    }
-    #app {
-      position: relative;
-      padding: 16px;
-      min-height: 200px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add a Poll</title>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #22272b;
+        color: #b6c2cf;
+      }
+      #app {
+        position: relative;
+        padding: 16px;
+        min-height: 200px;
+      }
 
-    /* --- Poll builder (the thing behind the auth overlay) --- */
-    .poll-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      align-items: center;
-      margin-top: 8px;
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 20px;
-      border-radius: 999px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      width: 160px;
-      justify-content: center;
-    }
-    .pill.yes { background: #1abc9c; color: #06342b; }
-    .pill.no { background: #e74c3c; color: #3a0d08; }
-    .pill.maybe { background: #f1c40f; color: #4a3900; }
+      /* --- Poll builder (the thing behind the auth overlay) --- */
+      /* --- Poll builder form (shown after authorization) --- */
+      #poll-form {
+        padding-top: 4px;
+      }
 
-    /* --- Authorization overlay --- */
-    #auth-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.94);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-    }
-    #auth-overlay p {
-      margin: 0 0 16px;
-      font-size: 14px;
-      color: #44546f;
-      max-width: 260px;
-    }
-    #authorize-btn {
-      background: #0c66e4;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 18px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    #authorize-btn:hover { background: #0055cc; }
-    #authorize-btn:disabled { opacity: 0.6; cursor: default; }
+      .tabs {
+        display: flex;
+        gap: 20px;
+        border-bottom: 1px solid #3c4045;
+        margin-bottom: 14px;
+      }
+      .tab {
+        background: none;
+        border: none;
+        color: #8c9bab;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 0 0 8px;
+        cursor: pointer;
+      }
+      .tab.active {
+        color: #669df1;
+        border-bottom: 2px solid #669df1;
+      }
 
-    .error {
-      color: #ae2e24;
-      font-size: 12px;
-      margin-top: 10px;
-    }
-    .hidden { display: none !important; }
-  </style>
-</head>
-<body>
-  <div id="app">
-    <div class="poll-options" aria-hidden="true">
-      <div class="pill yes">✓ YES</div>
-      <div class="pill no">✕ NO</div>
-      <div class="pill maybe">★ MAYBE</div>
+      .poll-input {
+        width: 100%;
+        background: transparent;
+        border: 1px solid #5a6570;
+        border-radius: 4px;
+        color: #b6c2cf;
+        font-size: 14px;
+        padding: 10px 12px;
+        margin-bottom: 10px;
+      }
+      .poll-input::placeholder {
+        color: #8c9bab;
+      }
+      .poll-input:focus {
+        outline: none;
+        border-color: #669df1;
+      }
+
+      .add-option-btn {
+        width: 100%;
+        background: #333a3f;
+        border: none;
+        border-radius: 4px;
+        color: #b6c2cf;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 12px;
+        margin-bottom: 14px;
+        cursor: pointer;
+      }
+      .add-option-btn:hover {
+        background: #3d454b;
+      }
+
+      .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #b6c2cf;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+
+      /* --- Authorization overlay --- */
+      #auth-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(34, 39, 43, 0.96);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+      }
+      #auth-overlay p {
+        margin: 0 0 16px;
+        font-size: 14px;
+        color: #9fadbc;
+        max-width: 260px;
+      }
+      #authorize-btn {
+        background: #0c66e4;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      #authorize-btn:hover {
+        background: #0055cc;
+      }
+      #authorize-btn:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .error {
+        color: #ae2e24;
+        font-size: 12px;
+        margin-top: 10px;
+      }
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="poll-form" class="hidden">
+        <div class="tabs">
+          <button class="tab active" id="tab-new" type="button">New</button>
+          <button class="tab" id="tab-recent" type="button">Recent</button>
+        </div>
+        <input
+          type="text"
+          class="poll-input"
+          id="poll-question"
+          placeholder="What are we voting on?"
+        />
+        <input
+          type="text"
+          class="poll-input"
+          id="poll-option-1"
+          placeholder="Option 1"
+        />
+        <input
+          type="text"
+          class="poll-input"
+          id="poll-option-2"
+          placeholder="Option 2"
+        />
+        <button class="add-option-btn" id="add-option-btn" type="button">
+          Add option
+        </button>
+        <label class="checkbox-row">
+          <input type="checkbox" id="allow-add-options" />
+          Allow voters to add options
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" id="allow-multiple-votes" />
+          Allow multiple votes per person
+        </label>
+      </div>
+
+      <div id="auth-overlay">
+        <p>To get started, authorize this Power-Up with Trello.</p>
+        <button id="authorize-btn">Authorize Card Polls</button>
+        <div id="auth-error" class="error hidden"></div>
+      </div>
     </div>
 
-    <div id="auth-overlay">
-      <p>To get started, authorize this Power-Up with Trello.</p>
-      <button id="authorize-btn">Authorize Card Polls</button>
-      <div id="auth-error" class="error hidden"></div>
-    </div>
-  </div>
-
-  <script src="./poll-popup.js"></script>
-</body>
+    <script src="./poll-popup.js"></script>
+  </body>
 </html>

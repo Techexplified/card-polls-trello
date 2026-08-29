@@ -18,8 +18,7 @@ function showOverlay() {
 
 function hideOverlay() {
   overlayEl.classList.add("hidden");
-  // Once authorized, this is where you'd render the actual poll builder
-  // and fetch/save poll data via t.get()/t.set() or your own backend.
+  document.getElementById("poll-form").classList.remove("hidden");
   t.sizeTo("#app");
 }
 
@@ -57,3 +56,19 @@ authorizeBtn.addEventListener("click", function () {
 t.render(function () {
   return checkAuthAndRender();
 });
+
+var tabNew = document.getElementById("tab-new");
+var tabRecent = document.getElementById("tab-recent");
+
+if (tabNew && tabRecent) {
+  tabNew.addEventListener("click", function () {
+    tabNew.classList.add("active");
+    tabRecent.classList.remove("active");
+    // TODO: show "new poll" fields, hide "recent polls" list
+  });
+  tabRecent.addEventListener("click", function () {
+    tabRecent.classList.add("active");
+    tabNew.classList.remove("active");
+    // TODO: fetch and show past polls via t.get()/your backend
+  });
+}
