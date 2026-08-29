@@ -25,6 +25,24 @@ window.TrelloPowerUp.initialize(
         },
       ];
     },
+    // Renders the "Polls" section on the card, below the description,
+    // whenever a poll has been saved for this card.
+    "card-back-section": function (t, options) {
+      return t.get("card", "shared", "poll").then(function (poll) {
+        if (!poll) {
+          return null; // no section shown until a poll exists
+        }
+        return {
+          title: "Polls",
+          icon: "https://card-polls-trello.vercel.app/images/poll-icon-dark.svg",
+          content: {
+            type: "iframe",
+            url: "./poll-section.html",
+            height: 190,
+          },
+        };
+      });
+    },
 
     // Lets Trello know whether the current member has authorized yet.
     // Trello uses this to decide whether to show an "Authorize Account"

@@ -81,6 +81,64 @@
         background: #3d454b;
       }
 
+      .option-row {
+        position: relative;
+      }
+      .option-row .poll-input {
+        padding-right: 34px;
+      }
+      .remove-option-btn {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #8c9bab;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .remove-option-btn:hover {
+        color: #b6c2cf;
+      }
+
+      .submit-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .submit-btn {
+        flex: 1;
+        background: #669df1;
+        color: #101204;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .submit-btn:hover {
+        background: #85b8ff;
+      }
+      .icon-btn {
+        width: 40px;
+        flex-shrink: 0;
+        background: #333a3f;
+        border: none;
+        border-radius: 4px;
+        color: #b6c2cf;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .icon-btn:hover {
+        background: #3d454b;
+      }
+
       .checkbox-row {
         display: flex;
         align-items: center;
@@ -150,18 +208,20 @@
           id="poll-question"
           placeholder="What are we voting on?"
         />
-        <input
-          type="text"
-          class="poll-input"
-          id="poll-option-1"
-          placeholder="Option 1"
-        />
-        <input
-          type="text"
-          class="poll-input"
-          id="poll-option-2"
-          placeholder="Option 2"
-        />
+        <div id="options-container">
+          <input
+            type="text"
+            class="poll-input"
+            id="poll-option-1"
+            placeholder="Option 1"
+          />
+          <input
+            type="text"
+            class="poll-input"
+            id="poll-option-2"
+            placeholder="Option 2"
+          />
+        </div>
         <button class="add-option-btn" id="add-option-btn" type="button">
           Add option
         </button>
@@ -173,6 +233,44 @@
           <input type="checkbox" id="allow-multiple-votes" />
           Allow multiple votes per person
         </label>
+
+        <div class="submit-row">
+          <button class="submit-btn" id="add-poll-btn" type="button">
+            Add poll to card
+          </button>
+          <button
+            class="icon-btn"
+            id="announce-btn"
+            type="button"
+            title="Post to team chat"
+            aria-label="Post to team chat"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 10v4a1 1 0 001 1h3l5 4V5L7 9H4a1 1 0 00-1 1z"
+                fill="currentColor"
+              />
+              <path
+                d="M16 8a4 4 0 010 8"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+              <path
+                d="M19 5a8 8 0 010 14"
+                stroke="currentColor"
+                stroke-width="1.6"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div id="auth-overlay">
