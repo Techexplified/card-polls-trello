@@ -37,7 +37,7 @@ window.TrelloPowerUp.initialize(
           icon: "https://card-polls-trello.vercel.app/images/poll-icon-dark.svg",
           content: {
             type: "iframe",
-            url: "./poll-section.html",
+            url: t.signUrl("./poll-section.html"),
             height: 190,
           },
         };
