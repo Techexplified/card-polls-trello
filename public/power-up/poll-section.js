@@ -159,8 +159,9 @@ function renderPolls() {
   t.sizeTo("body");
 }
 
-document.getElementById("manage-btn").addEventListener("click", function () {
+document.getElementById("manage-btn").addEventListener("click", function (e) {
   t.popup({
+    mouseEvent: e,
     title: "Polls - Manage",
     items: [
       {
