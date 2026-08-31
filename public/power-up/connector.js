@@ -44,7 +44,7 @@ window.TrelloPowerUp.initialize(
       });
     },
 
-    // Lets Trello know whether the current member has authorized yet.
+    // Lets Trello know whether the current member has authorized yet..
     // Trello uses this to decide whether to show an "Authorize Account"
     // prompt under the Power-Up's settings (gear icon).
     "authorization-status": function (t, options) {
