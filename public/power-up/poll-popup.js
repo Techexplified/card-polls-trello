@@ -130,7 +130,13 @@ addPollBtn.addEventListener("click", function () {
     votes: {},
   };
 
-  t.set("card", "shared", "poll", pollData).then(function () {
-    return t.closePopup();
-  });
+  t.get("card", "shared", "polls")
+    .then(function (existingPolls) {
+      var polls = existingPolls || [];
+      polls.push(pollData);
+      return t.set("card", "shared", "polls", polls);
+    })
+    .then(function () {
+      return t.closePopup();
+    });
 });

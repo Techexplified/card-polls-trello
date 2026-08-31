@@ -28,8 +28,8 @@ window.TrelloPowerUp.initialize(
     // Renders the "Polls" section on the card, below the description,
     // whenever a poll has been saved for this card.
     "card-back-section": function (t, options) {
-      return t.get("card", "shared", "poll").then(function (poll) {
-        if (!poll) {
+      return t.get("card", "shared", "polls").then(function (polls) {
+        if (!polls || polls.length === 0) {
           return null; // no section shown until a poll exists
         }
         return {

@@ -34,6 +34,12 @@
       .manage-btn:hover {
         background: #3d454b;
       }
+      .poll-block {
+        margin-bottom: 18px;
+      }
+      .poll-block:last-child {
+        margin-bottom: 0;
+      }
       .question {
         font-size: 14px;
         font-weight: 600;
@@ -64,8 +70,7 @@
     <div class="manage-row">
       <button class="manage-btn" id="manage-btn" type="button">Manage</button>
     </div>
-    <div class="question" id="poll-question"></div>
-    <div class="options" id="poll-options"></div>
+    <div id="polls-container"></div>
 
     <script src="./poll-section.js"></script>
   </body>

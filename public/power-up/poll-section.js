@@ -8,20 +8,34 @@ var t = window.TrelloPowerUp.iframe({
   appName: APP_NAME,
 });
 
-function renderPoll(poll) {
-  document.getElementById("poll-question").textContent = poll.question;
+function renderPolls(polls) {
+  var container = document.getElementById("polls-container");
+  container.innerHTML = "";
 
-  var optionsEl = document.getElementById("poll-options");
-  optionsEl.innerHTML = "";
+  polls.forEach(function (poll) {
+    var block = document.createElement("div");
+    block.className = "poll-block";
 
-  poll.options.forEach(function (optionText) {
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
-    btn.textContent = optionText;
-    // Voting logic (recording a member's vote in poll.votes) is a
-    // separate feature — wire this up once that's ready.
-    optionsEl.appendChild(btn);
+    var questionEl = document.createElement("div");
+    questionEl.className = "question";
+    questionEl.textContent = poll.question;
+    block.appendChild(questionEl);
+
+    var optionsEl = document.createElement("div");
+    optionsEl.className = "options";
+
+    poll.options.forEach(function (optionText) {
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "option-btn";
+      btn.textContent = optionText;
+      // Voting logic (recording a member's vote in poll.votes) is a
+      // separate feature — wire this up once that's ready.
+      optionsEl.appendChild(btn);
+    });
+
+    block.appendChild(optionsEl);
+    container.appendChild(block);
   });
 
   t.sizeTo("body");
@@ -36,9 +50,19 @@ document.getElementById("manage-btn").addEventListener("click", function () {
 });
 
 t.render(function () {
-  return t.get("card", "shared", "poll").then(function (poll) {
-    if (poll) {
-      renderPoll(poll);
-    }
-  });
+  return t
+    .get("card", "shared", "polls")
+    .then(function (polls) {
+      if (polls && polls.length) {
+        renderPolls(polls);
+      } else {
+        document.getElementById("polls-container").textContent =
+          "No polls yet.";
+      }
+    })
+    .catch(function (err) {
+      console.error("Failed to load polls:", err);
+      document.getElementById("polls-container").textContent =
+        "Error loading polls — check console.";
+    });
 });
