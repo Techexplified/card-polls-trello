@@ -167,6 +167,29 @@
       .cancel-btn:hover {
         background: #3d454b;
       }
+
+      .option-btn.selected {
+        background: #e0a800;
+        color: #1c1c1c;
+      }
+
+      .submit-vote-btn {
+        width: 100%;
+        margin-top: 4px;
+        padding: 10px 12px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 600;
+        background: #333a3f;
+        color: #8c9bab;
+        cursor: not-allowed;
+      }
+      .submit-vote-btn.enabled {
+        background: #669df1;
+        color: #101204;
+        cursor: pointer;
+      }
       .options {
         display: flex;
         flex-direction: column;

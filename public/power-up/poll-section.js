@@ -11,6 +11,7 @@ var t = window.TrelloPowerUp.iframe({
 var currentPolls = [];
 var memberId = null;
 var memberInitials = "?";
+var pendingSelections = {}; // pollIndex -> array of selected option indices, not yet submitted
 
 function computeStats(poll) {
   var counts = poll.options.map(function () {
@@ -57,6 +58,7 @@ function changeVote(pollIndex) {
   var votes = poll.votes || {};
   delete votes[memberId];
   poll.votes = votes;
+  delete pendingSelections[pollIndex];
   saveAndRender();
 }
 
@@ -196,6 +198,44 @@ function renderPolls() {
       footer.appendChild(changeBtn);
 
       block.appendChild(footer);
+    } else if (poll.allowMultipleVotes) {
+      if (!pendingSelections[pollIndex]) pendingSelections[pollIndex] = [];
+      var selected = pendingSelections[pollIndex];
+
+      poll.options.forEach(function (optionText, idx) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className =
+          "option-btn" + (selected.indexOf(idx) !== -1 ? " selected" : "");
+        btn.textContent = optionText;
+        btn.addEventListener("click", function () {
+          var pos = selected.indexOf(idx);
+          if (pos === -1) selected.push(idx);
+          else selected.splice(pos, 1);
+          renderPolls();
+        });
+        optionsEl.appendChild(btn);
+      });
+      block.appendChild(optionsEl);
+
+      var submitBtn = document.createElement("button");
+      submitBtn.type = "button";
+      submitBtn.className =
+        "submit-vote-btn" + (selected.length > 0 ? " enabled" : "");
+      submitBtn.textContent = "Submit vote";
+      submitBtn.disabled = selected.length === 0;
+      submitBtn.addEventListener("click", function () {
+        var votes = poll.votes || {};
+        votes[memberId] = selected.slice();
+        poll.votes = votes;
+        delete pendingSelections[pollIndex];
+        saveAndRender();
+      });
+      block.appendChild(submitBtn);
+
+      if (poll.allowAddOptions) {
+        createAddOptionRow(block, pollIndex);
+      }
     } else {
       poll.options.forEach(function (optionText, idx) {
         var btn = document.createElement("button");
