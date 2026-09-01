@@ -64,6 +64,67 @@ function saveAndRender() {
   t.set("card", "shared", "polls", currentPolls).then(renderPolls);
 }
 
+function addOptionToPoll(pollIndex, optionText) {
+  currentPolls[pollIndex].options.push(optionText);
+  saveAndRender();
+}
+
+function createAddOptionRow(block, pollIndex) {
+  var wrapper = document.createElement("div");
+
+  function showLink() {
+    wrapper.innerHTML = "";
+    var link = document.createElement("button");
+    link.type = "button";
+    link.className = "add-option-link";
+    link.textContent = "Add another option";
+    link.addEventListener("click", showInput);
+    wrapper.appendChild(link);
+    t.sizeTo("body");
+  }
+
+  function showInput() {
+    wrapper.innerHTML = "";
+    var row = document.createElement("div");
+    row.className = "add-option-row";
+
+    var input = document.createElement("input");
+    input.type = "text";
+    input.className = "poll-input add-option-input";
+    input.placeholder = "Add another option";
+
+    var confirmBtn = document.createElement("button");
+    confirmBtn.type = "button";
+    confirmBtn.className = "confirm-btn";
+    confirmBtn.innerHTML = "&#10003;";
+    confirmBtn.addEventListener("click", function () {
+      var val = input.value.trim();
+      if (val) addOptionToPoll(pollIndex, val);
+    });
+
+    var cancelBtn = document.createElement("button");
+    cancelBtn.type = "button";
+    cancelBtn.className = "cancel-btn";
+    cancelBtn.innerHTML = "&#10005;";
+    cancelBtn.addEventListener("click", showLink);
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") confirmBtn.click();
+      if (e.key === "Escape") showLink();
+    });
+
+    row.appendChild(input);
+    row.appendChild(confirmBtn);
+    row.appendChild(cancelBtn);
+    wrapper.appendChild(row);
+    input.focus();
+    t.sizeTo("body");
+  }
+
+  showLink();
+  block.appendChild(wrapper);
+}
+
 function renderPolls() {
   var container = document.getElementById("polls-container");
   container.innerHTML = "";
@@ -147,6 +208,10 @@ function renderPolls() {
         optionsEl.appendChild(btn);
       });
       block.appendChild(optionsEl);
+
+      if (poll.allowAddOptions) {
+        createAddOptionRow(block, pollIndex);
+      }
     }
 
     container.appendChild(block);
