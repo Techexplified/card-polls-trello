@@ -27,12 +27,20 @@ function computeStats(poll) {
     });
   });
 
-  var voterCount = Object.keys(votes).length;
+  var voterCount = Object.keys(votes).length; // distinct people, used for % of respondents
+  var totalSelections = counts.reduce(function (sum, c) {
+    return sum + c;
+  }, 0);
   var percentages = poll.options.map(function (_, idx) {
     return voterCount === 0 ? 0 : Math.round((counts[idx] / voterCount) * 100);
   });
 
-  return { counts: counts, percentages: percentages, voterCount: voterCount };
+  return {
+    counts: counts,
+    percentages: percentages,
+    voterCount: voterCount,
+    totalSelections: totalSelections,
+  };
 }
 
 function recordVote(pollIndex, optionIndex) {
@@ -185,7 +193,8 @@ function renderPolls() {
 
       var countLabel = document.createElement("span");
       countLabel.textContent =
-        stats.voterCount + (stats.voterCount === 1 ? " vote" : " votes");
+        stats.totalSelections +
+        (stats.totalSelections === 1 ? " vote" : " votes");
       footer.appendChild(countLabel);
 
       var changeBtn = document.createElement("button");
