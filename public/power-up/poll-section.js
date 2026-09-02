@@ -273,62 +273,6 @@ function renderPolls() {
   t.sizeTo("body");
 }
 
-document.getElementById("manage-btn").addEventListener("click", function (e) {
-  t.popup({
-    mouseEvent: e,
-    title: "Polls - Manage",
-    items: [
-      {
-        text: "Add a new poll",
-        callback: function (t) {
-          return t.popup({
-            title: "Add a Poll",
-            url: t.signUrl("./poll-popup.html"),
-            height: 300,
-          });
-        },
-      },
-      {
-        text: "Delete a poll",
-        callback: function (t) {
-          return t.get("card", "shared", "polls").then(function (polls) {
-            polls = polls || [];
-
-            if (polls.length === 0) {
-              return t.popup({
-                title: "Delete a Poll",
-                items: [
-                  { text: "No polls to delete", callback: function () {} },
-                ],
-              });
-            }
-
-            var deleteItems = polls.map(function (poll, idx) {
-              return {
-                text: poll.question,
-                callback: function (t) {
-                  var updated = polls.slice();
-                  updated.splice(idx, 1);
-                  return t
-                    .set("card", "shared", "polls", updated)
-                    .then(function () {
-                      return t.closePopup();
-                    });
-                },
-              };
-            });
-
-            return t.popup({
-              title: "Delete a Poll",
-              items: deleteItems,
-            });
-          });
-        },
-      },
-    ],
-  });
-});
-
 t.render(function () {
   return Promise.all([
     t.member("id"),
