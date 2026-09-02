@@ -105,17 +105,127 @@ addOptionBtn.addEventListener("click", function () {
   t.sizeTo("#app");
 });
 
+// ---- Poll type toggle ----
+var typeTextBtn = document.getElementById("type-text");
+var typeReactionBtn = document.getElementById("type-reaction");
+var textOptionsSection = document.getElementById("text-options-section");
+var reactionOptionsSection = document.getElementById(
+  "reaction-options-section",
+);
+var currentPollType = "text";
+
+function setPollType(newType) {
+  currentPollType = newType;
+  typeTextBtn.classList.toggle("active", newType === "text");
+  typeReactionBtn.classList.toggle("active", newType === "reaction");
+  textOptionsSection.classList.toggle("hidden", newType !== "text");
+  reactionOptionsSection.classList.toggle("hidden", newType !== "reaction");
+  t.sizeTo("#app");
+}
+
+typeTextBtn.addEventListener("click", function () {
+  setPollType("text");
+});
+typeReactionBtn.addEventListener("click", function () {
+  setPollType("reaction");
+});
+
+// ---- Reaction option rows ----
+var REACTION_EMOJIS = [
+  "👍",
+  "❤️",
+  "🔥",
+  "🚀",
+  "🎉",
+  "💡",
+  "👀",
+  "💯",
+  "👁️",
+  "✨",
+  "⚡",
+  "🤩",
+  "🎯",
+  "🙌",
+  "🥳",
+  "🤔",
+  "👊",
+  "🌱",
+];
+var reactionOptionsContainer = document.getElementById(
+  "reaction-options-container",
+);
+var quickReactionBank = document.getElementById("quick-reaction-bank");
+
+REACTION_EMOJIS.forEach(function (emoji) {
+  var btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "reaction-emoji-btn";
+  btn.textContent = emoji;
+  btn.addEventListener("click", function () {
+    addReactionOptionRow(emoji);
+  });
+  quickReactionBank.appendChild(btn);
+});
+
+function addReactionOptionRow(emoji) {
+  var row = document.createElement("div");
+  row.className = "reaction-option-row";
+
+  var tile = document.createElement("div");
+  tile.className = "reaction-emoji-tile";
+  tile.textContent = emoji;
+
+  var input = document.createElement("input");
+  input.type = "text";
+  input.className = "poll-input reaction-label-input";
+  input.placeholder = "Label (e.g. Yes / Approve)";
+
+  var trashBtn = document.createElement("button");
+  trashBtn.type = "button";
+  trashBtn.className = "trash-btn";
+  trashBtn.innerHTML = "&#128465;";
+  trashBtn.addEventListener("click", function () {
+    row.remove();
+    t.sizeTo("#app");
+  });
+
+  row.appendChild(tile);
+  row.appendChild(input);
+  row.appendChild(trashBtn);
+  reactionOptionsContainer.appendChild(row);
+  input.focus();
+  t.sizeTo("#app");
+}
+
+document
+  .getElementById("add-reaction-btn")
+  .addEventListener("click", function () {
+    addReactionOptionRow("➕");
+  });
+
 // ---- Save poll to the card ----
 var addPollBtn = document.getElementById("add-poll-btn");
 
 addPollBtn.addEventListener("click", function () {
   var question = document.getElementById("poll-question").value.trim();
-  var optionInputs = optionsContainer.querySelectorAll(".poll-input");
   var options = [];
-  optionInputs.forEach(function (input) {
-    var val = input.value.trim();
-    if (val) options.push(val);
-  });
+
+  if (currentPollType === "text") {
+    var optionInputs = optionsContainer.querySelectorAll(".poll-input");
+    optionInputs.forEach(function (input) {
+      var val = input.value.trim();
+      if (val) options.push(val);
+    });
+  } else {
+    var reactionRows = reactionOptionsContainer.querySelectorAll(
+      ".reaction-option-row",
+    );
+    reactionRows.forEach(function (row) {
+      var emoji = row.querySelector(".reaction-emoji-tile").textContent;
+      var label = row.querySelector(".reaction-label-input").value.trim();
+      if (label) options.push({ emoji: emoji, label: label });
+    });
+  }
 
   if (!question || options.length < 2) {
     alert("Please enter a question and at least two options.");
@@ -123,6 +233,7 @@ addPollBtn.addEventListener("click", function () {
   }
 
   var pollData = {
+    type: currentPollType,
     question: question,
     options: options,
     allowAddOptions: document.getElementById("allow-add-options").checked,

@@ -13,6 +13,13 @@ var memberId = null;
 var memberInitials = "?";
 var pendingSelections = {}; // pollIndex -> array of selected option indices, not yet submitted
 
+function getOptionDisplay(option) {
+  if (option && typeof option === "object" && option.emoji) {
+    return option.emoji + "  " + option.label;
+  }
+  return option;
+}
+
 function computeStats(poll) {
   var counts = poll.options.map(function () {
     return 0;
@@ -173,7 +180,8 @@ function renderPolls() {
 
         var label = document.createElement("span");
         label.className = "result-label";
-        label.textContent = stats.percentages[idx] + "%  " + optionText;
+        label.textContent =
+          stats.percentages[idx] + "%  " + getOptionDisplay(optionText);
         row.appendChild(label);
 
         if (myIndices.indexOf(idx) !== -1) {
@@ -216,7 +224,7 @@ function renderPolls() {
         btn.type = "button";
         btn.className =
           "option-btn" + (selected.indexOf(idx) !== -1 ? " selected" : "");
-        btn.textContent = optionText;
+        btn.textContent = getOptionDisplay(optionText);
         btn.addEventListener("click", function () {
           var pos = selected.indexOf(idx);
           if (pos === -1) selected.push(idx);
@@ -250,7 +258,7 @@ function renderPolls() {
         var btn = document.createElement("button");
         btn.type = "button";
         btn.className = "option-btn";
-        btn.textContent = optionText;
+        btn.textContent = getOptionDisplay(optionText);
         btn.addEventListener("click", function () {
           recordVote(pollIndex, idx);
         });

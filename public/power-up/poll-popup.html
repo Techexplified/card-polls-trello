@@ -149,6 +149,113 @@
         cursor: pointer;
       }
 
+      .poll-type-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .poll-type-card {
+        flex: 1;
+        background: #1d2125;
+        border: 1px solid #3c4045;
+        border-radius: 6px;
+        padding: 10px 12px;
+        text-align: left;
+        cursor: pointer;
+        color: #b6c2cf;
+      }
+      .poll-type-card.active {
+        border-color: #669df1;
+        background: #202b3d;
+      }
+      .poll-type-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+      .poll-type-icon {
+        font-size: 16px;
+      }
+      .poll-type-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid #5a6570;
+      }
+      .poll-type-card.active .poll-type-dot {
+        background: #669df1;
+        border-color: #669df1;
+      }
+      .poll-type-title {
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .poll-type-desc {
+        font-size: 11px;
+        color: #8c9bab;
+        line-height: 1.3;
+      }
+
+      .quick-reaction-bank {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        background: #1d2125;
+        border: 1px solid #3c4045;
+        border-radius: 6px;
+        padding: 10px;
+        margin-bottom: 12px;
+      }
+      .reaction-emoji-btn {
+        background: #2c3339;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+      }
+      .reaction-emoji-btn:hover {
+        background: #3d454b;
+      }
+
+      .reaction-option-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .reaction-emoji-tile {
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+        background: #2c3339;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+      }
+      .reaction-label-input {
+        margin-bottom: 0;
+        flex: 1;
+      }
+      .trash-btn {
+        background: none;
+        border: none;
+        color: #8c9bab;
+        font-size: 15px;
+        cursor: pointer;
+        padding: 4px;
+        flex-shrink: 0;
+      }
+      .trash-btn:hover {
+        color: #e2483d;
+      }
+
       /* --- Authorization overlay --- */
       #auth-overlay {
         position: absolute;
@@ -202,29 +309,64 @@
           <button class="tab active" id="tab-new" type="button">New</button>
           <button class="tab" id="tab-recent" type="button">Recent</button>
         </div>
+
+        <div class="poll-type-row">
+          <button class="poll-type-card active" id="type-text" type="button">
+            <div class="poll-type-header">
+              <span class="poll-type-icon">📝</span>
+              <span class="poll-type-dot"></span>
+            </div>
+            <div class="poll-type-title">Text Poll</div>
+            <div class="poll-type-desc">
+              Standard textual options with basic 2+ add option.
+            </div>
+          </button>
+          <button class="poll-type-card" id="type-reaction" type="button">
+            <div class="poll-type-header">
+              <span class="poll-type-icon">🎉</span>
+              <span class="poll-type-dot"></span>
+            </div>
+            <div class="poll-type-title">Reaction Poll</div>
+            <div class="poll-type-desc">
+              Emoji reaction sentiment (thumbs, hearts, flames, rockets).
+            </div>
+          </button>
+        </div>
+
         <input
           type="text"
           class="poll-input"
           id="poll-question"
           placeholder="What are we voting on?"
         />
-        <div id="options-container">
-          <input
-            type="text"
-            class="poll-input"
-            id="poll-option-1"
-            placeholder="Option 1"
-          />
-          <input
-            type="text"
-            class="poll-input"
-            id="poll-option-2"
-            placeholder="Option 2"
-          />
+
+        <div id="text-options-section">
+          <div id="options-container">
+            <input
+              type="text"
+              class="poll-input"
+              id="poll-option-1"
+              placeholder="Option 1"
+            />
+            <input
+              type="text"
+              class="poll-input"
+              id="poll-option-2"
+              placeholder="Option 2"
+            />
+          </div>
+          <button class="add-option-btn" id="add-option-btn" type="button">
+            Add option
+          </button>
         </div>
-        <button class="add-option-btn" id="add-option-btn" type="button">
-          Add option
-        </button>
+
+        <div id="reaction-options-section" class="hidden">
+          <div class="quick-reaction-bank" id="quick-reaction-bank"></div>
+          <div id="reaction-options-container"></div>
+          <button class="add-option-btn" id="add-reaction-btn" type="button">
+            + Add Reaction Option
+          </button>
+        </div>
         <label class="checkbox-row">
           <input type="checkbox" id="allow-add-options" />
           Allow voters to add options
