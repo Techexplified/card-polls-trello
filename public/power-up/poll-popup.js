@@ -133,6 +133,7 @@ typeReactionBtn.addEventListener("click", function () {
 // ---- Reaction option rows ----
 var REACTION_EMOJIS = [
   "👍",
+  "👎",
   "❤️",
   "🔥",
   "🚀",
@@ -149,7 +150,6 @@ var REACTION_EMOJIS = [
   "🥳",
   "🤔",
   "👊",
-  "🌱",
 ];
 var reactionOptionsContainer = document.getElementById(
   "reaction-options-container",
