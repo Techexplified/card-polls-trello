@@ -27,26 +27,6 @@
         padding-top: 4px;
       }
 
-      .tabs {
-        display: flex;
-        gap: 20px;
-        border-bottom: 1px solid #3c4045;
-        margin-bottom: 14px;
-      }
-      .tab {
-        background: none;
-        border: none;
-        color: #8c9bab;
-        font-size: 14px;
-        font-weight: 600;
-        padding: 0 0 8px;
-        cursor: pointer;
-      }
-      .tab.active {
-        color: #669df1;
-        border-bottom: 2px solid #669df1;
-      }
-
       .poll-input {
         width: 100%;
         background: transparent;
@@ -281,11 +261,6 @@
   <body>
     <div id="app">
       <div id="poll-form" class="hidden">
-        <div class="tabs">
-          <button class="tab active" id="tab-new" type="button">New</button>
-          <button class="tab" id="tab-recent" type="button">Recent</button>
-        </div>
-
         <div class="poll-type-row">
           <button class="poll-type-card active" id="type-text" type="button">
             Text Poll
